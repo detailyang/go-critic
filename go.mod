@@ -1,11 +1,28 @@
 module github.com/go-critic/go-critic
 
+go 1.25.0
+
 require (
-	github.com/go-toolsmith/astcopy v0.0.0-20180622191204-fc497f942afe
-	github.com/go-toolsmith/astequal v0.0.0-20180612175849-e9d316155331
-	github.com/go-toolsmith/astfmt v0.0.0-20180616094151-6ea5b99ab174
-	github.com/go-toolsmith/astp v0.0.0-20180612184503-d378e1e6ba8e
-	github.com/go-toolsmith/strparse v0.0.0-20180626175504-71162a977d98
-	github.com/logrusorgru/aurora v0.0.0-20180419164547-d694e6f975a9
-	golang.org/x/tools v0.0.0-20180831211245-7ca132754999
+	github.com/cristalhq/acmd v0.12.0
+	github.com/go-toolsmith/astcast v1.1.0
+	github.com/go-toolsmith/astcopy v1.1.0
+	github.com/go-toolsmith/astequal v1.2.0
+	github.com/go-toolsmith/astfmt v1.1.0
+	github.com/go-toolsmith/astp v1.1.0
+	github.com/go-toolsmith/pkgload v1.2.2
+	github.com/go-toolsmith/strparse v1.1.0
+	github.com/go-toolsmith/typep v1.1.0
+	github.com/google/go-cmp v0.7.0
+	github.com/quasilyte/go-ruleguard v0.4.5
+	github.com/quasilyte/go-ruleguard/dsl v0.3.23
+	github.com/quasilyte/regex/syntax v0.0.0-20210819130434-b3f0c404a727
+	golang.org/x/tools v0.49.0
+)
+
+require (
+	github.com/quasilyte/gogrep v0.5.0 // indirect
+	github.com/quasilyte/stdinfo v0.0.0-20220114132959-f7386bf02567 // indirect
+	golang.org/x/exp/typeparams v0.0.0-20251023183803-a4bb9ffd2546 // indirect
+	golang.org/x/mod v0.39.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
 )

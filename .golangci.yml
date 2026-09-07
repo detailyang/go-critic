@@ -1,35 +1,58 @@
-run:
-  # timeout for analysis, e.g. 30s, 5m, default is 1m
-  deadline: 3m
-
+version: "2"
 linters:
   enable:
-    - deadcode
-    - errcheck
-    - gas
-    - goconst
-    - gofmt
-    - goimports
-    - golint
-    - gosimple
-    - ineffassign
+    - copyloopvar
+    - gocritic
+    - goprintffuncname
+    - gosec
     - misspell
     - nakedret
-    - staticcheck
-    - structcheck
-    - typecheck
+    - revive
     - unconvert
     - unparam
-    - unused
-    - varcheck
+    - usetesting
   disable:
     - depguard
     - dupl
     - gocyclo
-    - govet
-    - interfacer
     - lll
-    - maligned
-    - megacheck # https://github.com/golangci/golangci-lint/issues/157
     - prealloc
-  fast: false
+  settings:
+    gocritic:
+      enabled-checks:
+        - ruleguard
+      settings:
+        ruleguard:
+          rules: rules.go
+    gosec:
+      excludes:
+        - G115
+    usetesting:
+      os-temp-dir: true
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - goprintffuncname
+        text: (?i)Warn(WithPos|Fixable)?
+    paths:
+      - checkers/rules
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - checkers/rules
+      - third_party$
+      - builtin$
+      - examples$

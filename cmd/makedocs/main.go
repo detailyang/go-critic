@@ -2,11 +2,13 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
 	"log"
+	"os"
+	"strings"
 	"text/template"
 
-	"github.com/go-critic/go-critic/lint"
+	"github.com/go-critic/go-critic/checkers"
+	"github.com/go-critic/go-critic/linter"
 )
 
 const (
@@ -15,17 +17,40 @@ const (
 )
 
 func main() {
-	tmpl := template.Must(template.ParseFiles(templatesPath + "overview.md.tmpl"))
+	if err := checkers.InitEmbeddedRules(); err != nil {
+		panic(err)
+	}
+
+	tmpl := parseTemplate(
+		"overview.md.tmpl",
+		"checker.partial.tmpl",
+		"checker_tr.partial.tmpl")
+
 	buf := bytes.Buffer{}
-	err := tmpl.Execute(&buf, struct {
-		Rules []*lint.Rule
+	err := tmpl.ExecuteTemplate(&buf, "overview", struct {
+		Checkers []*linter.CheckerInfo
 	}{
-		Rules: lint.RuleList(),
+		Checkers: linter.GetCheckersInfo(),
 	})
 	if err != nil {
 		log.Fatalf("render template: %v", err)
 	}
-	if err := ioutil.WriteFile(docsPath+"overview.md", buf.Bytes(), 0600); err != nil {
+
+	// A bit hacky but works, see https://github.com/go-critic/go-critic/pull/1403.
+	buff := bytes.ReplaceAll(buf.Bytes(), []byte("<all>"), []byte("&lt;all&gt;"))
+
+	if err := os.WriteFile(docsPath+"overview.md", buff, 0o600); err != nil {
 		log.Fatalf("write output file: %v", err)
 	}
+}
+
+func parseTemplate(names ...string) *template.Template {
+	paths := make([]string, len(names))
+	for i := range names {
+		paths[i] = templatesPath + names[i]
+	}
+	funcMap := template.FuncMap{
+		"ToLower": strings.ToLower,
+	}
+	return template.Must(template.New("overview").Funcs(funcMap).ParseFiles(paths...))
 }
